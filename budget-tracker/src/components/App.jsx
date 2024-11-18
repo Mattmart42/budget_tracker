@@ -32,7 +32,7 @@ function App() {
               path="/"
               element={
                 <div className="card">
-                  {!user ? <SignIn /> : <p>Welcome back, user!</p>}
+                  {!user ? <SignIn /> : null}
                 </div>
               }
             />

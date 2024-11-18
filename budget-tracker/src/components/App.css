@@ -7,7 +7,7 @@
 
 p {
   font-family: 'Quicksand';font-size: 22px;
-  letter-spacing: 1px;
+  letter-spacing: 3px;
   font-size: 20px;
 }
 
@@ -49,6 +49,22 @@ h1 {
   color: #76e076;
   letter-spacing: 10px;
 }
+
+nav {
+  display: flex;
+  flex-direction: column; 
+  gap: 10px; 
+  font-family: 'Quicksand';font-size: 22px;
+  letter-spacing: 1px;
+  font-size: 20px;
+}
+
+nav a {
+  text-decoration: none; 
+  padding: 10px; 
+  color: #000; 
+}
+
 
 
 

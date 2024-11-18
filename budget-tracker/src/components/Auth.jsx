@@ -10,12 +10,9 @@ export function SignOut() {
   return (
     <div className="display-name">
       <div>
-      Hello, {loggedInUserDisplayName()}  
+      Welcome back, {loggedInUserDisplayName()}  
       <button  className="button" onClick={logout}>Sign Out</button>
       </div>   
-      <div>
-        <button className="homepage-button">Continue</button>
-      </div>
     </div>
   )
 }
