@@ -1,12 +1,9 @@
 import { login, logout, loggedInUserDisplayName } from "../services/authService"
 import { HomePage } from "./Homepage"
 
+
 export function SignIn() {
   return <button onClick={login}>Sign In</button>
-}
-
-function homep(){
-  root.render(<HomePage />);
 }
 
 export function SignOut() {
@@ -17,7 +14,7 @@ export function SignOut() {
       <button  className="button" onClick={logout}>Sign Out</button>
       </div>   
       <div>
-      <button id="hompage-button"  onClick={homep}>Homepage :D</button>
+        <button className="homepage-button">Continue</button>
       </div>
     </div>
   )

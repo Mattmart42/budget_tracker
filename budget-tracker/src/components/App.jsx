@@ -1,30 +1,48 @@
-import { useState } from 'react'
 import './App.css'
 import { SignIn, SignOut } from "./Auth"
 import { useAuthentication } from "../services/authService"
 import { HomePage } from './Homepage'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 
-
+function handleClick() {
+  console.log('Link clicked!');
+}
 
 function App() {
-  
   const user = useAuthentication()
 
   return (
-    <>
-    <div className= 'header'>
-      {!user ? null: <SignOut/>}
-      
-    </div>
-      <h1>Budgetlyly</h1>
-      <p>FINANCIAL TRACKER</p>
-      <div className="card">
-      {!user ? <SignIn />: null}
+    <Router>
+      <div className="App">
+        <header className='header'>
+          {!user ? null : <SignOut />}
+          <h1>Budgetlyly</h1>
+          <p>FINANCIAL TRACKER</p>
+          <nav>
+            <Link to="/">Home</Link>
+            {user && <Link to="/Homepage">Homepage</Link>}
+          </nav>
+        </header>
+
+        <main>
+          <Routes>
+            {/* Main screen content */}
+            <Route
+              path="/"
+              element={
+                <div className="card">
+                  {!user ? <SignIn /> : <p>Welcome back, user!</p>}
+                </div>
+              }
+            />
+            {/* Homepage route */}
+            <Route path="/Homepage" element={<HomePage />} />
+          </Routes>
+        </main>
       </div>
-      
-    </>
-  )
+    </Router>
+  );
 }
 
 export default App
