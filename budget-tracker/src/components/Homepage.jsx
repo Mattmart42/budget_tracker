@@ -1,19 +1,107 @@
-import { login, logout, loggedInUserDisplayName, useAuthentication } from "../services/authService"
-import { useState } from "react";
-import { updateSpending, resetSpending } from "../services/userService";
+import { useAuthentication } from "../services/authService"
+import { useState, useEffect, useMemo } from "react";
+import { updateSpending, resetSpending, getSpending } from "../services/userService";
 
 export function HomePage() {
-  const [balance, setBalance] = useState(Number)
-  const [budget, setBudget] = useState(Number)
+  const [food, setFood] = useState(0)
+  const [home, setHome] = useState(0)
+  const [transportation, setTransportation] = useState(0)
+  const [entertainment, setEntertainment] = useState(0)
+  const [shopping, setShopping] = useState(0)
+  const [other, setOther] = useState(0)
+  
+  const [spendingData, setSpendingData] = useState([]);
 
-  const [food, setFood] = useState(Number)
-  const [home, setHome] = useState(Number)
-  const [transportation, setTransportation] = useState(Number)
-  const [entertainment, setEntertainment] = useState(Number)
-  const [shopping, setShopping] = useState(Number)
-  const [other, setOther] = useState(Number)
   const user = useAuthentication()
   let userId = user ? user.uid : null;
+
+  useEffect(() => {
+    if (userId) {
+      getSpending({ userId })
+        .then((data) => {
+          console.log("Fetched spending data:", data);
+          setSpendingData(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching spending data:", error);
+        });
+    }
+  }, [userId]); 
+
+  const chartData = useMemo(() => ({
+    type: "bar",
+    data: {
+      labels: [
+        "Food",
+        "Home",
+        "Transportation",
+        "Entertainment",
+        "Shopping",
+        "Other",
+      ],
+      datasets: [
+        {
+          label: "Spending",
+          data: spendingData,
+        },
+        {
+          label: "Budget",
+          data: [250, 100, 100, 200, 200, 100],
+        },
+      ],
+    },
+  }), [spendingData]);
+
+  const chartUrl = useMemo(() => {
+    return `https://quickchart.io/chart?width=500&height=300&chart=${encodeURIComponent(
+      JSON.stringify(chartData)
+    )}`;
+  }, [chartData]);
+
+  function addUserData({ food, home, transportation, entertainment, shopping, other }) {
+    updateSpending({ userId, food, home, transportation, entertainment, shopping, other })
+      .then(() => {
+        console.log("Spending data updated successfully");
+        getSpending({ userId })
+          .then((data) => {
+            console.log("Fetched updated spending data:", data);
+            setSpendingData(data);
+          })
+          .catch((error) => {
+            console.error("Error fetching updated spending data:", error);
+          });
+        setFood(food);
+        setHome(home);
+        setTransportation(transportation);
+        setEntertainment(entertainment);
+        setShopping(shopping);
+        setOther(other);
+      })
+      .catch((error) => {
+        console.error("Error updating spending data:", error);
+      });
+  }
+  
+  function resetUserData({ food, home, transportation, entertainment, shopping, other }) {
+    resetSpending({ userId, food, home, transportation, entertainment, shopping, other })
+      .then(() => {
+        setFood(0);
+        setHome(0);
+        setTransportation(0);
+        setEntertainment(0);
+        setShopping(0);
+        setOther(0);
+        setSpendingData([]);
+      })
+      .catch((error) => {
+        console.error("Error updating spending data:", error);
+      });
+  }
+
+  function handleInputChange(event, setter) {
+    const value = event.target.value;
+    setter(value);
+  }
 
   return (
     <div className="homepage">
@@ -70,38 +158,15 @@ export function HomePage() {
           </div>
         </form>
         <br></br>
-        <button onClick={() => addUserData({ food, home, transportation, entertainment, shopping, other })} id="submit">Update Spending</button>
+        <button onClick={() => addUserData({ food, home, transportation, entertainment, shopping, other })} id="updateSpendingButton">Update Spending</button>
         <br></br>
-        <button onClick={() => resetUserData({ food, home, transportation, entertainment, shopping, other })} id="reset">Reset</button>
+        <br></br>
+        <button onClick={() => resetUserData({ food, home, transportation, entertainment, shopping, other })} id="resetSpendingButton">Reset Spending</button>
         <br></br>
       </article>
+      <>
+        <img src={chartUrl} alt="Spending Chart" />
+      </>
     </div>
   );
-
-  function addUserData({ food, home, transportation, entertainment, shopping, other }) {
-    updateSpending({ userId, food, home, transportation, entertainment, shopping, other }).then((user) => {
-      setFood(food);
-      setHome(home);
-      setTransportation(transportation);
-      setEntertainment(entertainment);
-      setShopping(shopping);
-      setOther(other);
-    })
-  }
-  
-  function resetUserData({ food, home, transportation, entertainment, shopping, other }) {
-    resetSpending({ userId, food, home, transportation, entertainment, shopping, other }).then((user) => {
-      setFood(0);
-      setHome(0);
-      setTransportation(0);
-      setEntertainment(0);
-      setShopping(0);
-      setOther(0);
-    })
-  }
-
-  function handleInputChange(event, setter) {
-    const value = event.target.value;
-    setter(value);
-  }
 }

@@ -4,14 +4,8 @@ import { useAuthentication } from "../services/authService"
 import { HomePage } from './Homepage'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
-
-function handleClick() {
-  console.log('Link clicked!');
-}
-
 function App() {
   const user = useAuthentication()
-
   return (
     <Router>
       <div className="App">

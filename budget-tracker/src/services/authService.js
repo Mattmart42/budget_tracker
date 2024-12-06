@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth"
 import { auth } from "../firebaseConfig"
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig"
 
 export function login() {
@@ -29,12 +29,8 @@ export function useAuthentication() {
 auth.onAuthStateChanged(async (user) => {
   if (user) {
     const userRef = doc(db, "users", user.uid);
-
-    // Check if the user document exists
     const userDoc = await getDoc(userRef);
-
     if (!userDoc.exists()) {
-      // Create the document only if it doesn't exist
       await setDoc(userRef, {
         name: user.displayName || "Anonymous",
         createdAt: new Date(),

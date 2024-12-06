@@ -1,6 +1,4 @@
 import { login, logout, loggedInUserDisplayName } from "../services/authService"
-import { HomePage } from "./Homepage"
-
 
 export function SignIn() {
   return <button onClick={login}>Sign In</button>
