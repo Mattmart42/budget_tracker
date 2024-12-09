@@ -37,26 +37,6 @@ export async function resetSpending({ userId, food, home, transportation, entert
   });
 }
 
-export async function getUserData({ userId }) {
-  if (!userId) {
-    console.error("User ID is null. Cannot fetch user data.");
-    return null;
-  }
-  try {
-    const userRef = doc(db, 'users', userId);
-    const docSnap = await getDoc(userRef);
-    if (docSnap.exists()) {
-      return docSnap.data();
-    } else {
-      console.log("No such document!");
-      return null;
-    }
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-    return null;
-  }
-}
-
 export async function getSpending({ userId }) {
   if (!userId) {
     console.error("User ID is null. Cannot fetch spending data.");
@@ -82,5 +62,89 @@ export async function getSpending({ userId }) {
   } catch (error) {
     console.error("Error fetching spending data:", error);
     return [];
+  }
+}
+
+export async function updateBudget({ userId, foodBudget, homeBudget, transportationBudget, entertainmentBudget, shoppingBudget, otherBudget }) {
+  if (!userId) {
+    throw new Error("User ID is required to update budget.");
+  }
+  const userRef = doc(db, 'users', userId);
+  const data = {
+    foodBudget: foodBudget || 0,
+    homeBudget: homeBudget || 0,
+    transportationBudget: transportationBudget || 0,
+    entertainmentBudget: entertainmentBudget || 0,
+    shoppingBudget: shoppingBudget || 0,
+    otherBudget: otherBudget || 0,
+  };
+  await updateDoc(userRef, {
+    foodBudget: data.foodBudget,
+    homeBudget: data.homeBudget,
+    transportationBudget: data.transportationBudget,
+    entertainmentBudget: data.entertainmentBudget,
+    shoppingBudget: data.shoppingBudget,
+    otherBudget: data.otherBudget,
+  });
+}
+
+export async function resetBudget({ userId, foodBudget, homeBudget, transportationBudget, entertainmentBudget, shoppingBudget, otherBudget }) {
+  const data = { foodBudget, homeBudget, transportationBudget, entertainmentBudget, shoppingBudget, otherBudget }
+  const userRef = doc(db, 'users', userId);
+  await updateDoc(userRef, {
+    foodBudget: 0,
+    homeBudget: 0,
+    transportationBudget: 0,
+    entertainmentBudget: 0,
+    shoppingBudget: 0,
+    otherBudget: 0
+  });
+}
+
+export async function getBudget({ userId }) {
+  if (!userId) {
+    console.error("User ID is null. Cannot fetch budget data.");
+    return [];
+  }
+  try {
+    const data = await getUserData({ userId });
+    if (data) {
+      const dataList = [
+        data.foodBudget || 0,
+        data.homeBudget || 0,
+        data.transportationBudget || 0,
+        data.entertainmentBudget || 0,
+        data.shoppingBudget || 0,
+        data.otherBudget || 0,
+      ];
+      console.log("Budget data:", dataList);
+      return dataList;
+    } else {
+      console.error("No data found for the user.");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching budget data:", error);
+    return [];
+  }
+}
+
+export async function getUserData({ userId }) {
+  if (!userId) {
+    console.error("User ID is null. Cannot fetch user data.");
+    return null;
+  }
+  try {
+    const userRef = doc(db, 'users', userId);
+    const docSnap = await getDoc(userRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.log("No such document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return null;
   }
 }

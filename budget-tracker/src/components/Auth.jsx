@@ -8,7 +8,9 @@ export function SignOut() {
   return (
     <div className="display-name">
       <div>
-      Welcome back, {loggedInUserDisplayName()}  
+      Welcome back, {loggedInUserDisplayName()}
+      </div>
+      <div>
       <button  className="button" onClick={logout}>Sign Out</button>
       </div>   
     </div>

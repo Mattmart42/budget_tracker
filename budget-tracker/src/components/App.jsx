@@ -9,15 +9,23 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header className='header'>
-          {!user ? null : <SignOut />}
-          <h1>Budgetlyly</h1>
-          <p>FINANCIAL TRACKER</p>
-          <nav>
+      {!user ? null : (
+        <div className="sign-out">
+          <SignOut />
+        </div>
+      )}
+      <header className="header">
+        <div className="header-content">
+          <div className="branding">
+            <h1>Budgetlyly</h1>
+            <p>FINANCIAL TRACKER</p>
+          </div>
+          <nav className="nav-links">
             <Link to="/">Home</Link>
-            {user && <Link to="/Homepage">Homepage</Link>}
+            {user && <Link to="/Homepage">Budget</Link>}
           </nav>
-        </header>
+        </div>
+      </header>
 
         <main>
           <Routes>
