@@ -79,12 +79,12 @@ export async function updateBudget({ userId, foodBudget, homeBudget, transportat
     otherBudget: otherBudget || 0,
   };
   await updateDoc(userRef, {
-    foodBudget: increment(data.foodBudget),
-    homeBudget: increment(data.homeBudget),
-    transportationBudget: increment(data.transportationBudget),
-    entertainmentBudget: increment(data.entertainmentBudget),
-    shoppingBudget: increment(data.shoppingBudget),
-    otherBudget: increment(data.otherBudget),
+    foodBudget: data.foodBudget,
+    homeBudget: data.homeBudget,
+    transportationBudget: data.transportationBudget,
+    entertainmentBudget: data.entertainmentBudget,
+    shoppingBudget: data.shoppingBudget,
+    otherBudget: data.otherBudget,
   });
 }
 
