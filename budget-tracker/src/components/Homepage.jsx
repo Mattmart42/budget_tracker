@@ -170,7 +170,7 @@ export function HomePage() {
   }
 
   function handleInputChange(event, setter) {
-    const value = event.target.value;
+    const value = parseFloat(event.target.value) || 0;
     setter(value);
   }
 
@@ -182,7 +182,7 @@ export function HomePage() {
           <div className="buttons">
             <button onClick={() => addUserBudget({ foodBudget, homeBudget, transportationBudget, entertainmentBudget, shoppingBudget, otherBudget })} id="updateBudgetButton">Update Budget</button>
             <br></br>
-            <button onClick={() => resetUserBudget({ foodBudgetBudget, homeBudget, transportationBudget, entertainmentBudget, shoppingBudget, otherBudget })} id="resetBudgetButton">Reset Budget</button>
+            <button onClick={() => resetUserBudget({ foodBudget, homeBudget, transportationBudget, entertainmentBudget, shoppingBudget, otherBudget })} id="resetBudgetButton">Reset Budget</button>
           </div>
         </div>
         <form>
